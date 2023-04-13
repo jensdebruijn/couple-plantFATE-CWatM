@@ -35,7 +35,7 @@ if __name__ == '__main__':
         soil_moisture_layer_3=0.3, # ratio [0-1]
         soil_tickness_layer_1=0.05, # meter
         soil_tickness_layer_2=0.3, # meter
-        soil_tickness_layer_3=0.3, # meter
+        soil_tickness_layer_3=2, # meter
         precipitation=1, # mm
         water_pressure_deficit=0 # check with Mikhail
         irradiance=0.5, # check with Mikhail
