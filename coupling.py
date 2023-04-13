@@ -13,17 +13,18 @@ def couple_plantFATE(
         irradiance,
         irrigation=0, # forest never has has irrigation
     ):
-
-    # run plantFATE
-    irradiance = 0.5
-    water_pressure_deficit = 0.5
-
-    soil_water_potential_CWatM = xxx
-    psi = run_plantFATE(soil_water_potential_CWatM)
     
+    assert irigation == 0
+    
+    soil_water_potential_CWatM = xxxx # check with Mikhail
 
+    psi = run_plantFATE(
+        soil_water_potential_CWatM,
+        precipitation,
+        irradiance
+    )
+    
     evapotranspiration = # how do I calculate this?
-
     return evapotranspiration
 
 
