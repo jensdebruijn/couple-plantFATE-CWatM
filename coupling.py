@@ -10,8 +10,9 @@ def calculate_vapour_pressure_deficit(temperature, relative_humidity):
     # TODO: Implement
     return vapour_pressure_deficit
     
-def calculate_photosynthetically_active_radiation(shortwave_radiation, longwave_radiation):
-    # TODO: Implement
+def calculate_photosynthetically_active_radiation(shortwave_radiation, longwave_radiation, xi=0.5):
+    # https://doi.org/10.1016/B978-0-12-815826-5.00005-2
+    photosynthetically_active_radiation = shortwave_radiation * xi
     return photosynthetically_active_radiation
 
 def couple_plantFATE(
