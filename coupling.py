@@ -1,5 +1,6 @@
 def run_plantFATE(soil_water_potential_CWatM):
-    return psi
+    # TODO: Implement
+    return evapotranspiration
 
 def calculate_soil_water_potential(soil_moisture, soil_thickness):
     # TODO: Implement
