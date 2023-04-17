@@ -6,14 +6,13 @@ def run_plantFATE(soil_water_potentials, vapour_pressure_deficit, photosynthetic
     return evapotranspiration
 
 def calculate_soil_water_potential(
-        # https://doi.org/10.1016/B978-0-12-374460-9.00007-X
         soil_moisture,  # [0-1]
         soil_moisture_wilting_point,  # [0-1]
         soil_moisture_field_capacity,  # [0-1]
         wilting_point=-1500,  # kPa
         field_capacity=-33  # kPa
     ):
-
+    # https://doi.org/10.1016/B978-0-12-374460-9.00007-X
     n_potential = - np.log(wilting_point / field_capacity) / np.log(soil_moisture_wilting_point / soil_moisture_field_capacity)
     assert n_potential >= 0
     a_potential = 1.5 * 10 ** 6 * soil_moisture_wilting_point ** n_potential
