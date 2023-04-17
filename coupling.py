@@ -20,8 +20,9 @@ def couple_plantFATE(
 
     psi = run_plantFATE(
         soil_water_potential_CWatM,
-        precipitation,
-        irradiance
+        vapour pressure deficit,
+        photosynthetic active radiation,
+        temperature
     )
     
     evapotranspiration = # how do I calculate this?
