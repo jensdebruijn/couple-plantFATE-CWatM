@@ -6,6 +6,7 @@ def run_plantFATE(soil_water_potentials, vapour_pressure_deficit, photosynthetic
     return evapotranspiration
 
 def calculate_soil_water_potential(
+        # https://doi.org/10.1016/B978-0-12-374460-9.00007-X
         soil_moisture,  # [0-1]
         soil_moisture_wilting_point,  # [0-1]
         soil_moisture_field_capacity,  # [0-1]
