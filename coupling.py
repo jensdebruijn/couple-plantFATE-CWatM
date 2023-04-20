@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 def run_plantFATE(soil_water_potentials, vapour_pressure_deficit, photosynthetically_active_radiation, temperature):
     # TODO: Implement
-    return evapotranspiration
+    return evapotranspiration, soil_specific_depletion_1, soil_specific_depletion_2, soil_specific_depletion_3
 
 def calculate_soil_water_potential(
         soil_moisture,  # [0-1]
@@ -25,10 +25,11 @@ def calculate_vapour_pressure_deficit(temperature, relative_humidity):
     saturated_vapour_pressure = 0.611 * np.exp((17.502 * temperature) / (temperature + 240.97))  # kPa
     actual_vapour_pressure = saturated_vapour_pressure * relative_humidity  # kPa
     vapour_pressure_deficit = saturated_vapour_pressure - actual_vapour_pressure
-    return actual_vapour_pressure
+    return vapour_pressure_deficit
     
 def calculate_photosynthetically_active_radiation(shortwave_radiation, longwave_radiation, xi=0.5):
     # https://doi.org/10.1016/B978-0-12-815826-5.00005-2
+    print("should check whether this is daily maximum")  # if mean, multiply by 2 for night, multiply by 2 for integral of sine wave
     photosynthetically_active_radiation = shortwave_radiation * xi
     return photosynthetically_active_radiation
 
@@ -41,7 +42,7 @@ def couple_plantFATE(
         soil_tickness_layer_3,  # m
         soil_moisture_wilting_point,  # ratio [0-1]
         soil_moisture_field_capacity,  # ratio [0-1]
-        temperature,  # degrees Kelvin
+        temperature,  # degrees Kelvin - mean temperature
         relative_humidity,  # ratio [0-1]
         shortwave_radiation,  # W/m2
         longwave_radiation  # W/m2
@@ -61,7 +62,7 @@ def couple_plantFATE(
     
     photosynthetically_active_radiation = calculate_photosynthetically_active_radiation(shortwave_radiation, longwave_radiation)
 
-    evapotranspiration = run_plantFATE(
+    evapotranspiration, soil_specific_depletion_1, soil_specific_depletion_2, soil_specific_depletion_3 = run_plantFATE(
         [
             soil_water_potential_1,
             soil_water_potential_2,
