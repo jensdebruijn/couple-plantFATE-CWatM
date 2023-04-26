@@ -54,7 +54,7 @@ class PlantFATECoupling:
             soil_moisture_field_capacity_1,  # ratio [0-1]
             soil_moisture_field_capacity_2,  # ratio [0-1]
             soil_moisture_field_capacity_3,  # ratio [0-1]
-            temperature,  # degrees Kelvin, mean temperature
+            temperature,  # degrees Celcius, mean temperature
             relative_humidity,  # percentage [0-100]
             shortwave_radiation,  # W/m2, daily mean
             longwave_radiation  # W/m2, daily mean
@@ -131,7 +131,7 @@ if __name__ == '__main__':
             soil_moisture_field_capacity_1=row['wfc1'],  # ratio [0-1]
             soil_moisture_field_capacity_2=row['wfc2'],  # ratio [0-1]
             soil_moisture_field_capacity_3=row['wfc3'],  # ratio [0-1]
-            temperature=row['Tavg'],  # degrees Kelvin
+            temperature=row['Tavg'],  # degrees Celcius
             relative_humidity=row['hurs'],  # percentage
             shortwave_radiation=row['Rsds'],  # W/m2
             longwave_radiation=row['Rsdl']  # W/m2
