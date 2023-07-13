@@ -59,3 +59,12 @@ df_full = pandas.merge(df_met_full, df_water, how="inner", on="date")
 
 df_full.loc[:, 'Temp'] = df_full.Tavg
 
+df_full = df_full.iloc[:, [7] + list(range(2, 7)) + list(range(8, len(df_full.columns)))]
+df_full.rename(columns={"date": "time"}, inplace=True)
+df_full.time = list(range(0, len(df_full)))
+
+
+
+df_full.to_csv("data/metdata_cwatm_amz_processed.csv", sep=',', index=False, encoding='utf-8')
+
+
