@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 import cppimport.import_hook
+from importlib import reload
 import plantFATE
 
 
@@ -22,15 +23,23 @@ class PlantFATECoupling:
         print("running step")
         print("current time: ")
         print(self.plantFATE_model.tcurrent)
+        print(self.plantFATE_model.E.tcurrent)
         print(soil_water_potentials)
         photosynthetically_active_radiation = photosynthetically_active_radiation * 2.15
 
-        self.plantFATE_model.update_environment_tc(temperature)
-        self.plantFATE_model.update_environment_vpd(vapour_pressure_deficit * 1000)
-        self.plantFATE_model.update_environment_swp(soil_water_potentials[0])
-        self.plantFATE_model.update_environment_ppfd(photosynthetically_active_radiation)
-        self.plantFATE_model.update_environment_ppfd_max(photosynthetically_active_radiation * 4)
+        # self.plantFATE_model.update_environment_tc(temperature)
+        # self.plantFATE_model.update_environment_vpd(vapour_pressure_deficit * 1000)
+        # self.plantFATE_model.update_environment_swp(soil_water_potentials[0])
+        # self.plantFATE_model.update_environment_ppfd(photosynthetically_active_radiation)
+        # self.plantFATE_model.update_environment_ppfd_max(photosynthetically_active_radiation * 4)
 
+        self.plantFATE_model.update_environment(temperature,
+                                                photosynthetically_active_radiation * 4,
+                                                photosynthetically_active_radiation,
+                                                vapour_pressure_deficit * 1000,
+                                                np.nan,
+                                                np.nan,
+                                                soil_water_potentials[0])
         self.plantFATE_model.simulate_step()
 
         trans = self.plantFATE_model.props.trans
@@ -149,14 +158,18 @@ if __name__ == '__main__':
 
     plantFATE_df = pd.read_csv('data/metdata_cwatm_amz_processed.csv', index_col=0)
 
-    plantFATE_df = plantFATE_df.iloc[0:995, :]
+    plantFATE_df = plantFATE_df.iloc[0:10, :]
 
     eT = []
+    # eT_ave = []
     gpp = []
     gs = []
     swp = []
+    swp_ave = []
     vpd = []
+    vpd_ave = []
     ppfd = []
+    ppfd_ave = []
 
     plantFATE_coupling = PlantFATECoupling('params/p_daily.ini', 'data/metdata_cwatm_amz_processed.csv')
     for time, row in plantFATE_df.iterrows():
@@ -181,14 +194,27 @@ if __name__ == '__main__':
         eT.append(evapotranspiration)
         gpp.append(plantFATE_coupling.plantFATE_model.props.gpp)
         gs.append(plantFATE_coupling.plantFATE_model.props.gs)
-        swp.append(plantFATE_coupling.plantFATE_model.E.clim.swp)
-        vpd.append(plantFATE_coupling.plantFATE_model.E.clim.vpd)
-        ppfd.append(plantFATE_coupling.plantFATE_model.E.clim.ppfd)
+        # print(gs)
+        print("\n")
+        print("Climate outputs")
+        swp.append(plantFATE_coupling.plantFATE_model.E.currentClim.swp)
+        print(swp)
+        swp_ave.append(plantFATE_coupling.plantFATE_model.E.weightedAveClim.swp)
+        print(swp_ave)
+        vpd.append(plantFATE_coupling.plantFATE_model.E.currentClim.vpd)
+        print(vpd)
+        vpd_ave.append(plantFATE_coupling.plantFATE_model.E.weightedAveClim.vpd)
+        print(vpd_ave)
+        ppfd.append(plantFATE_coupling.plantFATE_model.E.currentClim.ppfd)
+        print(ppfd)
+        ppfd_ave.append(plantFATE_coupling.plantFATE_model.E.weightedAveClim.ppfd)
+        print(ppfd_ave)
+        print("\n\n")
 
-    plantFATE_df['transpiration'] = eT
-    plantFATE_df['GPP'] = gpp
-    plantFATE_df['gs'] = gs
-    plantFATE_df['swp_out'] = swp
-    plantFATE_df['vpd_out'] = vpd
-    plantFATE_df['ppfd_out'] = ppfd
-    plantFATE_df.to_csv("out/test_data_with_update.csv")
+    # plantFATE_df['transpiration'] = eT
+    # plantFATE_df['GPP'] = gpp
+    # plantFATE_df['gs'] = gs
+    # plantFATE_df['swp_out'] = swp
+    # plantFATE_df['vpd_out'] = vpd
+    # plantFATE_df['ppfd_out'] = ppfd
+    # plantFATE_df.to_csv("out/test_data_with_update.csv")
