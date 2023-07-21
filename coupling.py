@@ -3,7 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 import cppimport.import_hook
-from importlib import reload
 import plantFATE
 
 
@@ -11,9 +10,9 @@ class PlantFATECoupling:
     # plantFATE_model = None
     # soil_data = None
     def __init__(self, param_file, soil_file):
-        self.plantFATE_model = plantFATE.Simulator("params/p_daily.ini", "daily")
+        self.plantFATE_model = plantFATE.Simulator("params/p_daily.ini")
         # self.soil_file = pd.read_csv(soil_file)
-        self.plantFATE_model.init(0, 700)
+        self.plantFATE_model.init(1990, 2014)
 
     def close_simulation(self):
         self.plantFATE_model.close()
@@ -158,7 +157,8 @@ if __name__ == '__main__':
 
     plantFATE_df = pd.read_csv('data/metdata_cwatm_amz_processed.csv', index_col=0)
 
-    plantFATE_df = plantFATE_df.iloc[0:10, :]
+    plantFATE_df = pd.read_csv('plantFATE.csv', index_col=0)
+    plantFATE_df = plantFATE_df.iloc[0:7, :]
 
     eT = []
     # eT_ave = []
@@ -188,13 +188,13 @@ if __name__ == '__main__':
             soil_moisture_field_capacity_3=row['wfc3'],  # ratio [0-1]
             temperature=row['Tavg'],  # degrees Celcius
             relative_humidity=row['hurs'],  # percentage
-            shortwave_radiation=row['Rsds'],  # W/m2
-            longwave_radiation=row['Rsdl']  # W/m2
+            shortwave_radiation=row['Rsds'],  # W/m2 - or MJd-1
+            longwave_radiation=row['Rsdl']  # W/m2 - or MJd-1
         )
         eT.append(evapotranspiration)
         gpp.append(plantFATE_coupling.plantFATE_model.props.gpp)
         gs.append(plantFATE_coupling.plantFATE_model.props.gs)
-        # print(gs)
+        print(gs)
         print("\n")
         print("Climate outputs")
         swp.append(plantFATE_coupling.plantFATE_model.E.currentClim.swp)

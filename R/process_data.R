@@ -48,13 +48,6 @@ p <- ggplot(data_all, aes(x = date_yr, y = ppfd_out, color = update)) +
 p
 
 
-p <- ggplot(data_all, aes(x = date_yr, y = ppfd_max_out, color = update)) +
-  geom_point()+ 
-  scale_y_continuous("GPP") + 
-  scale_x_continuous("Time [yr]") + 
-  scale_color_discrete("cWATm input")
-p
-
 p <- ggplot(data_all, aes(x = date_yr, y = gs, color = update)) +
   geom_point()+ 
   scale_y_continuous("Stomatal Conductance [mol m-2 s-1]") + 
