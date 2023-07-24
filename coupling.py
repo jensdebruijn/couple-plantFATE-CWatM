@@ -9,7 +9,7 @@ import plantFATE
 class PlantFATECoupling:
     # plantFATE_model = None
     # soil_data = None
-    def __init__(self, param_file, soil_file):
+    def __init__(self, param_file):
         self.plantFATE_model = plantFATE.Simulator("params/p_daily.ini")
         # self.soil_file = pd.read_csv(soil_file)
         self.plantFATE_model.init(1990, 2014)
@@ -19,11 +19,11 @@ class PlantFATECoupling:
 
     def run_plantFATE(self, soil_water_potentials, vapour_pressure_deficit, photosynthetically_active_radiation,
                       temperature):
-        print("running step")
-        print("current time: ")
-        print(self.plantFATE_model.tcurrent)
-        print(self.plantFATE_model.E.tcurrent)
-        print(soil_water_potentials)
+        # print("running step")
+        # print("current time: ")
+        # print(self.plantFATE_model.tcurrent)
+        # print(self.plantFATE_model.E.tcurrent)
+        # print(soil_water_potentials)
         photosynthetically_active_radiation = photosynthetically_active_radiation * 2.15
 
         # self.plantFATE_model.update_environment_tc(temperature)
@@ -158,7 +158,7 @@ if __name__ == '__main__':
     plantFATE_df = pd.read_csv('data/metdata_cwatm_amz_processed.csv', index_col=0)
 
     plantFATE_df = pd.read_csv('plantFATE.csv', index_col=0)
-    plantFATE_df = plantFATE_df.iloc[0:7, :]
+    plantFATE_df = plantFATE_df.iloc[0:4000, :]
 
     eT = []
     # eT_ave = []
@@ -170,8 +170,9 @@ if __name__ == '__main__':
     vpd_ave = []
     ppfd = []
     ppfd_ave = []
+    date = []
 
-    plantFATE_coupling = PlantFATECoupling('params/p_daily.ini', 'data/metdata_cwatm_amz_processed.csv')
+    plantFATE_coupling = PlantFATECoupling('params/p_daily.ini')
     for time, row in plantFATE_df.iterrows():
         evapotranspiration, soil_specific_depletion_1, soil_specific_depletion_2, soil_specific_depletion_3 = plantFATE_coupling.step(
             soil_moisture_layer_1=row['w1'],  # ratio [0-1]
@@ -194,27 +195,34 @@ if __name__ == '__main__':
         eT.append(evapotranspiration)
         gpp.append(plantFATE_coupling.plantFATE_model.props.gpp)
         gs.append(plantFATE_coupling.plantFATE_model.props.gs)
-        print(gs)
-        print("\n")
-        print("Climate outputs")
+        # print(gs)
+        # print("\n")
+        # print("Climate outputs")
         swp.append(plantFATE_coupling.plantFATE_model.E.currentClim.swp)
-        print(swp)
+        # print(swp)
         swp_ave.append(plantFATE_coupling.plantFATE_model.E.weightedAveClim.swp)
-        print(swp_ave)
+        # print(swp_ave)
         vpd.append(plantFATE_coupling.plantFATE_model.E.currentClim.vpd)
-        print(vpd)
+        # print(vpd)
         vpd_ave.append(plantFATE_coupling.plantFATE_model.E.weightedAveClim.vpd)
-        print(vpd_ave)
+        # print(vpd_ave)
         ppfd.append(plantFATE_coupling.plantFATE_model.E.currentClim.ppfd)
-        print(ppfd)
+        # print(ppfd)
         ppfd_ave.append(plantFATE_coupling.plantFATE_model.E.weightedAveClim.ppfd)
-        print(ppfd_ave)
-        print("\n\n")
+        # print(ppfd_ave)
+        # print("\n\n")
+        date.append(time)
 
-    # plantFATE_df['transpiration'] = eT
-    # plantFATE_df['GPP'] = gpp
-    # plantFATE_df['gs'] = gs
-    # plantFATE_df['swp_out'] = swp
-    # plantFATE_df['vpd_out'] = vpd
-    # plantFATE_df['ppfd_out'] = ppfd
-    # plantFATE_df.to_csv("out/test_data_with_update.csv")
+    plantFATE_df['date'] = date
+    plantFATE_df['transpiration'] = eT
+    plantFATE_df['GPP'] = gpp
+    plantFATE_df['gs'] = gs
+    plantFATE_df['swp_out'] = swp
+    plantFATE_df['swp_ave_out'] = swp_ave
+    plantFATE_df['vpd_out'] = vpd
+    plantFATE_df['vpd_ave_out'] = vpd_ave
+    plantFATE_df['ppfd_out'] = ppfd
+    plantFATE_df['ppfd_ave_out'] = ppfd_ave
+
+    plantFATE_df.to_csv("data/out_data_test.csv", sep=',', index=False, encoding='utf-8')
+
