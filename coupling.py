@@ -208,10 +208,12 @@ def test_soil_water_potential(soil_moisture_wilting_point, soil_moisture_field_c
 if __name__ == '__main__':
     # test_soil_water_potential(soil_moisture_wilting_point=0.126, soil_moisture_field_capacity=0.268, soil_moisture_saturation=0.461)  # loam
 
+    # Load plantFATE data
     plantFATE_df = pd.read_csv('plantFATE.csv', index_col=0)
-    plantFATE_df = plantFATE_df.iloc[0:4000, :]
 
+    # Initialise coupling: link to the parameters file 
     plantFATE_coupling = PlantFATECoupling('params/p_daily.ini')
+    # Initialise the plantFATE model with date and environmental data
     plantFATE_coupling.plantFATE_init(tstart=plantFATE_df.index[0],
                                       soil_moisture_layer_1=plantFATE_df.w1[0],  # ratio [0-1]
                                       soil_moisture_layer_2=plantFATE_df.w2[0],  # ratio [0-1]
@@ -231,8 +233,10 @@ if __name__ == '__main__':
                                       longwave_radiation=plantFATE_df.Rsdl[0]  # W/m2 - or MJd-1
                                       )
 
+    # Remove first row from dataFrame - start at next step
     plantFATE_df = plantFATE_df.iloc[1:10000, :]
 
+    # Run model row by row of available data
     for time, row in plantFATE_df.iterrows():
         evapotranspiration, soil_specific_depletion_1, soil_specific_depletion_2, soil_specific_depletion_3 = plantFATE_coupling.step(
             soil_moisture_layer_1=row['w1'],  # ratio [0-1]
@@ -253,7 +257,7 @@ if __name__ == '__main__':
             longwave_radiation=row['Rsdl']  # W/m2 - or MJd-1
         )
 
-    plantFATE_coupling.close_simulation()
+    # Save data outputs and close the simulator
     plantFATE_coupling.plantFATE_model.exportEnvironment("out/environment_0.csv")
     plantFATE_coupling.plantFATE_model.exportEmergentProps("out/emergentProps_0.csv")
-    # plantFATE_coupling.plantFATE_model.exportEnvironment("out/emergentProps.csv")
+    plantFATE_coupling.close_simulation()
