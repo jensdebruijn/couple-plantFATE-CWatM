@@ -47,7 +47,7 @@ class PlantFATERunner:
                                                 vapour_pressure_deficit * 1000,
                                                 np.nan,
                                                 np.nan,
-                                                soil_water_potentials[0])
+                                                soil_water_potentials[1])
         self.plantFATE_model.simulate_step()
 
         self.saveEnvironment()
