@@ -18,7 +18,7 @@ class PlantFATERunner:
     speciesProps = pd.DataFrame()
 
     def __init__(self, param_file):
-        self.plantFATE_model = sim("params/p_daily.ini")
+        self.plantFATE_model = sim(param_file)
         # self.soil_file = pd.read_csv(soil_file)
 
     def init(self, tstart, tend):
@@ -33,8 +33,8 @@ class PlantFATERunner:
         newclim.vpd = vpd_0 * 1000
         newclim.swp = soil_water_potentials0[0]
 
-        datestart = datetime.strptime(tstart, "%Y-%m-%d")
-        datediff = datetime.strptime(tstart, "%Y-%m-%d") - datetime(datestart.year, 1, 1)
+        datestart = tstart
+        datediff = datestart - datetime(datestart.year, 1, 1)
         tstart = datestart.year + datediff.days / 365
         self.plantFATE_model.init(tstart, newclim)
 

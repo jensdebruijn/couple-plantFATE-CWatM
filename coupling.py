@@ -1,9 +1,6 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-
-import cppimport.import_hook
-import plantFATE
 import plantFATERunner
 
 
@@ -170,7 +167,8 @@ class PlantFATECoupling:
             temperature,  # degrees Celcius, mean temperature
             relative_humidity,  # percentage [0-100]
             shortwave_radiation,  # W/m2, daily mean
-            longwave_radiation)
+            longwave_radiation
+        )
 
         evapotranspiration, soil_specific_depletion_1, soil_specific_depletion_2, soil_specific_depletion_3 = self.run_plantFATE_step(
             soil_water_potentials,

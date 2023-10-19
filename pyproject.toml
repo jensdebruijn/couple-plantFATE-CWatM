@@ -1,0 +1,25 @@
+[build-system]
+requires = ["flit_core >=3.4.0,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "pyplantFATE"
+authors = [
+    {name = "Elisa Stefaniak", email = "stefaniak@iiasa.ac.at"},
+    {name = "Jens de Bruijn", email = "jens.de.bruijn@vu.nl"},
+    {name = "Mikhail Smilovic", email = "smilovic@iiasa.ac.at"},
+]
+dependencies = [
+]
+requires-python = ">=3.10"
+readme = "README.md"
+classifiers = [
+    # https://pypi.python.org/pypi?%3Aaction=list_classifiers
+    "Development Status :: 1 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Hydrology",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Programming Language :: Python :: 3",
+]
+dynamic = ['version', 'description']
